@@ -8,7 +8,7 @@ import api from '../../services/api';
 import axios from 'axios';
 import { LeafletMouseEvent } from "leaflet";
 import Dropzone from '../../components/Dropzone/index'
-
+import Swal from 'sweetalert2'
 
 const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -162,9 +162,25 @@ const CreatePoint = () => {
       await api.post('points', data);
       
       
-      alert('Cadastro Concluido');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
       
-      history.push('/');
+      Toast.fire({
+        icon: 'success',
+        title: 'Ponto cadastrado com sucesso!'
+      })
+
+      //Demorar de aparecer
+      setTimeout( function(){history.push('/')}, 1500);
       
   }
 
